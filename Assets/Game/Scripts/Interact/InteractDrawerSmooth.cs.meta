@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c42d1a2dcdb39214ba29c25aa5d02d40
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - doorTransform: {instanceID: 0}
+  - source: {instanceID: 0}
+  - openDoor: {fileID: 8300000, guid: e0d716fb7413efe45968b6677f9fb621, type: 3}
+  - closeDoor: {fileID: 8300000, guid: 5a9bcec4915a3144a922e2d859b4eabe, type: 3}
+  - lockedDoor: {fileID: 8300000, guid: e11ab924e39a9bd449cc74e8574410bc, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
