@@ -9,6 +9,13 @@ public enum Hand
     RIGHT = 1
 }
 
+public enum StepValues
+{
+    PERFECT,
+    GOOD,
+    MISS
+}
+
 public struct GameData
 {
     public float playTime;
@@ -16,6 +23,7 @@ public struct GameData
     public int perfects;
     public int goods;
     public int misses;
+    public StepValues lastStep;
     public InteractableObject[] currentGrabItem;
     public Character[] characters;
     public int characterCount;
@@ -25,15 +33,17 @@ public class Game : MonoBehaviour
 {
 
     public static bool godMode = false;
+    public static bool vrDisabled = false;
 
     public static Game instance;
 
     public static GameData data;
-    
-    public static InteractionBehaviour[] handInteractions;
 
     public StepPlayer stepPlayer;
-    public StepList stepList;
+    [HideInInspector]
+    public InteractMenuButton[] menuButtons;
+    [HideInInspector]
+    public InteractionBehaviour[] handInteractions;
 
     void Awake()
     {
@@ -55,13 +65,26 @@ public class Game : MonoBehaviour
         data.perfects = 0;
         data.goods = 0;
         data.misses = 0;
+        data.lastStep = StepValues.PERFECT;
         data.currentGrabItem = new InteractableObject[2];
         data.characters = new Character[20];
         data.characterCount = 0;
 
         handInteractions = new InteractionBehaviour[2];
+        menuButtons = new InteractMenuButton[System.Enum.GetNames(typeof(MenuButtonType)).Length];
 
-        stepPlayer.PlaySteps(stepList);
+#if UNITY_EDITOR
+        stepPlayer.PlaySteps(0);
+#endif
+    }
+
+    public static void StartNewGame()
+    {
+        data.health = 1;
+        data.perfects = 0;
+        data.goods = 0;
+        data.misses = 0;
+        data.lastStep = StepValues.PERFECT;
     }
 
     public static void ClearPlayerHands()
@@ -76,6 +99,31 @@ public class Game : MonoBehaviour
     {
         data.health = Mathf.Clamp(data.health, 0, 1);
         data.playTime += Time.deltaTime;
+
+        if(data.health <= 0)
+        {
+            for (int buttonIndex = 0; buttonIndex < menuButtons.Length; ++buttonIndex)
+            {
+                menuButtons[buttonIndex].ResetState();
+            }
+
+            stepPlayer.StopSteps();
+        }
+    }
+
+    public static Color GetStepColor(StepValues stepValue)
+    {
+        switch(stepValue)
+        {
+            case StepValues.PERFECT:
+                return Color.green;
+            case StepValues.GOOD:
+                return Color.blue;
+            case StepValues.MISS:
+                return Color.red;
+        }
+
+        return Color.white;
     }
 
 }

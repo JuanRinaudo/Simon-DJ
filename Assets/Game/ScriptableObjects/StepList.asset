@@ -13,18 +13,179 @@ MonoBehaviour:
   m_Name: StepList
   m_EditorClassIdentifier: 
   steps:
-  - startTime: 3
-    perfectTime: 3
-    duration: 0
-    value: 0
-    component: 7
-  - startTime: 1
-    perfectTime: 3
-    duration: 0
+  - startTime: 5
+    perfectTime: 10
+    value: 1
+    component: 3
+  - startTime: 0
+    perfectTime: 10
     value: 0.8
+    component: 1
+  - startTime: 0
+    perfectTime: 10
+    value: 0
+    component: 5
+  - startTime: 12
+    perfectTime: 3
+    value: -1
     component: 10
   - startTime: 1
     perfectTime: 3
-    duration: 1
-    value: 0
+    value: -1
+    component: 7
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
     component: 11
+  - startTime: 3
+    perfectTime: 3
+    value: -1
+    component: 10
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 7
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 11
+  - startTime: 8
+    perfectTime: 10
+    value: 0
+    component: 3
+  - startTime: 0
+    perfectTime: 10
+    value: 0.8
+    component: 5
+  - startTime: 0
+    perfectTime: 10
+    value: 0
+    component: 1
+  - startTime: 12.5
+    perfectTime: 3
+    value: -1
+    component: 7
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 8
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 9
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 10
+  - startTime: 3
+    perfectTime: 3
+    value: -1
+    component: 13
+  - startTime: 2
+    perfectTime: 3
+    value: -1
+    component: 12
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 11
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 9
+  - startTime: 5
+    perfectTime: 5
+    value: 1
+    component: 6
+  - startTime: 6
+    perfectTime: 3
+    value: -1
+    component: 9
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 12
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 13
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 8
+  - startTime: 4
+    perfectTime: 3
+    value: -1
+    component: 9
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 12
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 13
+  - startTime: 0.5
+    perfectTime: 3
+    value: -1
+    component: 8
+  - startTime: 5
+    perfectTime: 5
+    value: 0.33
+    component: 6
+  - startTime: 8
+    perfectTime: 10
+    value: 1
+    component: 3
+  - startTime: 0
+    perfectTime: 10
+    value: 1
+    component: 1
+  - startTime: 0
+    perfectTime: 10
+    value: 0
+    component: 5
+  - startTime: 12.5
+    perfectTime: 5
+    value: 1
+    component: 2
+  - startTime: 6
+    perfectTime: 3
+    value: -1
+    component: 10
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 8
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 10
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 12
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 10
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 11
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 10
+  - startTime: 1
+    perfectTime: 3
+    value: -1
+    component: 7
+  - startTime: 5
+    perfectTime: 5
+    value: 1
+    component: 0
+  - startTime: 5
+    perfectTime: 5
+    value: 0.33
+    component: 2

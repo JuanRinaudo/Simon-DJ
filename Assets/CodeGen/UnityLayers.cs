@@ -12,4 +12,10 @@ public class UnityLayers {
     public const int WATER_INDEX = 4;
     public const string UI = "UI";
     public const int UI_INDEX = 5;
+    public const string PLAYER = "Player";
+    public const int PLAYER_INDEX = 8;
+    public const string INTERACTABLE = "Interactable";
+    public const int INTERACTABLE_INDEX = 9;
+    public const string BOUNDS = "Bounds";
+    public const int BOUNDS_INDEX = 10;
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 public class StepPlayer : MonoBehaviour
 {
 
-    private struct RunningStep
+    [System.Serializable]
+    public struct RunningStep
     {
         public GameObject parent;
         public float startTimestamp;
@@ -15,12 +16,13 @@ public class StepPlayer : MonoBehaviour
 
     public GameObject[] componentList;
 
+    public StepList[] stepSongs;
     public StepList playingList;
     public int stepIndex;
     public float playTime;
     public float nextStepTime;
 
-    private List<RunningStep> currentSteps;
+    public List<RunningStep> currentSteps;
 
     public GameObject stepmarkPrefab;
     public GameObject stepmarkSliderPrefab;
@@ -30,11 +32,17 @@ public class StepPlayer : MonoBehaviour
     public bool songFinished { get; private set; } = true;
     public bool loopSteps;
 
-    public static float HEALTH_MISS = -0.1f;
-    public static float HEALTH_PERFECT = 0.02f;
+    public static float HEALTH_PERFECT = 0.05f;
+    public static float HEALTH_GOOD = 0.01f;
+    public static float HEALTH_MISS = -0.2f;
     public static float PERFECT_TIME_DELTA = 0.3f;
     public static float PERFECT_VALUE_DELTA = 0.2f;
     public static float MISS_TURNTABLE_DELTA = 0.3f;
+
+    public void PlaySteps(int stepIndex)
+    {
+        PlaySteps(stepSongs[stepIndex]);
+    }
 
     public void PlaySteps(StepList stepList)
     {
@@ -47,11 +55,42 @@ public class StepPlayer : MonoBehaviour
         nextStepTime = 0;
     }
 
+    public void StopSteps()
+    {
+        playingList = null;
+        songFinished = true;
+
+        for(int stepIndex = 0; stepIndex < currentSteps.Count; ++stepIndex)
+        {
+            GameObject instance = currentSteps[stepIndex].markInstance;
+            LeanTween.cancel(instance);
+            Destroy(instance);
+        }
+        currentSteps.Clear();
+
+        for (int characterIndex = 0; characterIndex < Game.data.characterCount; ++characterIndex)
+        {
+            Character character = Game.data.characters[characterIndex];
+            character.StopDance();
+        }
+    }
+
+    public void Freeplay()
+    {
+        StopSteps();
+
+        for (int characterIndex = 0; characterIndex < Game.data.characterCount; ++characterIndex)
+        {
+            Character character = Game.data.characters[characterIndex];
+            character.StartDance();
+        }
+    }
+
     private void Update()
     {
         playTime += Time.deltaTime;
 
-        if (!songFinished)
+        if (playingList != null && !songFinished)
         {
             nextStepTime += Time.deltaTime;
             Step step = playingList.steps[stepIndex];
@@ -79,9 +118,9 @@ public class StepPlayer : MonoBehaviour
                 else if(interactTurntable != null)
                 {
                     markInstance = Instantiate(stepmarTurntablePrefab, componentTransform);
-                    markInstance.transform.localScale = new Vector3(1, step.duration, 1);
-                    startPosition += new Vector3(0, step.duration, 0);
-                    endPosition += new Vector3(0, step.duration, 0);
+                    markInstance.transform.localScale = new Vector3(1, step.value, 1);
+                    startPosition += new Vector3(0, step.value, 0);
+                    endPosition += new Vector3(0, step.value, 0);
                 }
                 else
                 {
@@ -101,17 +140,10 @@ public class StepPlayer : MonoBehaviour
                     () => {
                         if (interactTurntable)
                         {
-                            LeanTween.moveLocal(runningStep.markInstance, new Vector3(0, -step.duration, 0), step.duration).setOnComplete(
+                            LeanTween.moveLocal(runningStep.markInstance, new Vector3(0, -step.value, 0), step.value).setOnComplete(
                                 () =>
                                 {
-                                    StepPerfect();
-                                    currentSteps.Remove(runningStep);
-                                    LeanTween.scale(runningStep.markInstance, Vector3.one * 2, PERFECT_TIME_DELTA).setOnComplete(
-                                        () =>
-                                        {
-                                            Destroy(runningStep.markInstance);
-                                        }
-                                    );
+                                    StepPerfect(runningStep);
                                 }
                             );
                         }
@@ -122,23 +154,20 @@ public class StepPlayer : MonoBehaviour
                                 {
                                     if (interactButton != null)
                                     {
-                                        StepMiss();
+                                        StepMiss(runningStep);
                                     }
                                     else if (interactSlider != null)
                                     {
                                         float deltaValue = step.value - interactSlider.value;
                                         if (Mathf.Abs(deltaValue) < PERFECT_VALUE_DELTA)
                                         {
-                                            StepPerfect();
+                                            StepPerfect(runningStep);
                                         }
                                         else
                                         {
-                                            StepMiss();
+                                            StepMiss(runningStep);
                                         }
                                     }
-
-                                    Destroy(runningStep.markInstance);
-                                    currentSteps.Remove(runningStep);
                                 }
                             );
                         }
@@ -175,22 +204,68 @@ public class StepPlayer : MonoBehaviour
         return new RunningStep();
     }
 
-    private void StepPerfect()
+    private void SetMaterialColors(GameObject gameObject, Color color)
+    {
+        MeshRenderer[] meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+        for(int i = 0; i < meshRenderers.Length; ++i)
+        {
+            meshRenderers[i].material.color = color;
+        }
+    }
+
+    private void StepPerfect(RunningStep runningStep)
     {
         Game.data.health += HEALTH_PERFECT;
         Game.data.perfects++;
+        Game.data.lastStep = StepValues.PERFECT;
 
-        for(int characterIndex = 0; characterIndex < Game.data.characterCount; ++characterIndex)
+        SetMaterialColors(runningStep.markInstance, Game.GetStepColor(StepValues.PERFECT));
+
+        LeanTween.scale(runningStep.markInstance, Vector3.one * 2, PERFECT_TIME_DELTA).setOnComplete(
+            () =>
+            {
+                Destroy(runningStep.markInstance);
+                currentSteps.Remove(runningStep);
+            }
+        );
+
+        for (int characterIndex = 0; characterIndex < Game.data.characterCount; ++characterIndex)
         {
             Character character = Game.data.characters[characterIndex];
             character.StartDance();
         }
     }
 
-    private void StepMiss()
+    private void StepGood(RunningStep runningStep)
+    {
+        Game.data.health += HEALTH_GOOD;
+        Game.data.misses++;
+        Game.data.lastStep = StepValues.GOOD;
+
+        SetMaterialColors(runningStep.markInstance, Game.GetStepColor(StepValues.GOOD));
+
+        for (int characterIndex = 0; characterIndex < Game.data.characterCount; ++characterIndex)
+        {
+            Character character = Game.data.characters[characterIndex];
+            character.StartDance();
+        }
+    }
+
+    private void StepMiss(RunningStep runningStep)
     {
         Game.data.health += HEALTH_MISS;
         Game.data.misses++;
+        Game.data.lastStep = StepValues.MISS;
+
+        SetMaterialColors(runningStep.markInstance, Game.GetStepColor(StepValues.MISS));
+
+        LeanTween.scale(runningStep.markInstance, Vector3.zero, PERFECT_TIME_DELTA).setOnComplete(
+            () =>
+            {
+                Destroy(runningStep.markInstance);
+                currentSteps.Remove(runningStep);
+            }
+        );
 
         for (int characterIndex = 0; characterIndex < Game.data.characterCount; ++characterIndex)
         {
@@ -210,25 +285,11 @@ public class StepPlayer : MonoBehaviour
             float deltaTime = playTime - (runningStep.startTimestamp + step.perfectTime);
             if (Mathf.Abs(deltaTime) < PERFECT_TIME_DELTA)
             {
-                StepPerfect();
-                LeanTween.scale(runningStep.markInstance, Vector3.one * 2, PERFECT_TIME_DELTA).setOnComplete(
-                    () =>
-                    {
-                        Destroy(runningStep.markInstance);
-                        currentSteps.Remove(runningStep);
-                    }
-                );
+                StepPerfect(runningStep);
             }
             else
             {
-                StepMiss();
-                LeanTween.scale(runningStep.markInstance, Vector3.zero, PERFECT_TIME_DELTA).setOnComplete(
-                    () =>
-                    {
-                        Destroy(runningStep.markInstance);
-                        currentSteps.Remove(runningStep);
-                    }
-                );
+                StepMiss(runningStep);
             }
         }
     }
@@ -242,14 +303,7 @@ public class StepPlayer : MonoBehaviour
                 LeanTween.cancel(runningStep.markInstance);
 
                 Step step = runningStep.step;
-                StepMiss();
-                LeanTween.scale(runningStep.markInstance, Vector3.zero, PERFECT_TIME_DELTA).setOnComplete(
-                    () =>
-                    {
-                        Destroy(runningStep.markInstance);
-                        currentSteps.Remove(runningStep);
-                    }
-                );
+                StepMiss(runningStep);
             }
         }
     }

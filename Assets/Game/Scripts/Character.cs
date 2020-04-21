@@ -6,14 +6,18 @@ public class Character : MonoBehaviour
 {
 
     public Animator animator;
-    public Mesh characterMesh;
-    public Material characterMaterial;
+    public SkinnedMeshRenderer skinnedMeshRenderer;
+    public Mesh[] characterMeshes;
+    public Material[] characterMaterials;
 
     [HideInInspector]
     public int characterIndex;
 
     private void Awake()
     {
+        skinnedMeshRenderer.sharedMesh = characterMeshes[Random.Range(0, characterMeshes.Length)];
+        skinnedMeshRenderer.sharedMaterial = characterMaterials[Random.Range(0, characterMaterials.Length)];
+
         Game.data.characters[Game.data.characterCount] = this;
         characterIndex = Game.data.characterCount;
         Game.data.characterCount++;

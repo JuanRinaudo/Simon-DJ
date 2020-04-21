@@ -27,7 +27,6 @@ public struct Step
 {
     public float startTime;
     public float perfectTime;
-    public float duration;
     public float value;
     public DJComponent component;
 }

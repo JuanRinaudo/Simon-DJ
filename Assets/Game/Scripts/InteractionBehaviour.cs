@@ -41,7 +41,7 @@ public class InteractionBehaviour : MonoBehaviour
         }
         jointRigidbody = parentJoint.GetComponent<Rigidbody>();
 
-        Game.handInteractions[(int)handAsigned] = this;
+        Game.instance.handInteractions[(int)handAsigned] = this;
     }
 
     public void AddObject(InteractableObject interactable)
