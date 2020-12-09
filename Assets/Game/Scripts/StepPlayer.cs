@@ -103,29 +103,29 @@ public class StepPlayer : MonoBehaviour
                 Vector3 startPosition = new Vector3(0, 4, 0);
                 Vector3 endPosition = Vector3.zero;
 
-                InteractButton interactButton = componentTransform.GetComponent<InteractButton>();
-                InteractSlider interactSlider = componentTransform.GetComponent<InteractSlider>();
-                InteractTurntable interactTurntable = componentTransform.GetComponent<InteractTurntable>();
-                if (interactButton != null) {
-                    markInstance = Instantiate(stepmarkButtonPrefab, componentTransform);
-                }
-                else if (interactSlider != null)
-                {
-                    markInstance = Instantiate(stepmarkSliderPrefab, componentTransform);
-                    startPosition += interactSlider.GetValueOffset(step.value);
-                    endPosition += interactSlider.GetValueOffset(step.value);
-                }
-                else if(interactTurntable != null)
-                {
-                    markInstance = Instantiate(stepmarTurntablePrefab, componentTransform);
-                    markInstance.transform.localScale = new Vector3(1, step.value, 1);
-                    startPosition += new Vector3(0, step.value, 0);
-                    endPosition += new Vector3(0, step.value, 0);
-                }
-                else
-                {
-                    markInstance = Instantiate(stepmarkPrefab, componentTransform);
-                }
+                //InteractButton interactButton = componentTransform.GetComponent<InteractButton>();
+                //InteractSlider interactSlider = componentTransform.GetComponent<InteractSlider>();
+                //InteractTurntable interactTurntable = componentTransform.GetComponent<InteractTurntable>();
+                //if (interactButton != null) {
+                //    markInstance = Instantiate(stepmarkButtonPrefab, componentTransform);
+                //}
+                //else if (interactSlider != null)
+                //{
+                //    markInstance = Instantiate(stepmarkSliderPrefab, componentTransform);
+                //    startPosition += interactSlider.GetValueOffset(step.value);
+                //    endPosition += interactSlider.GetValueOffset(step.value);
+                //}
+                //else if(interactTurntable != null)
+                //{
+                //    markInstance = Instantiate(stepmarTurntablePrefab, componentTransform);
+                //    markInstance.transform.localScale = new Vector3(1, step.value, 1);
+                //    startPosition += new Vector3(0, step.value, 0);
+                //    endPosition += new Vector3(0, step.value, 0);
+                //}
+                //else
+                //{
+                //    markInstance = Instantiate(stepmarkPrefab, componentTransform);
+                //}
 
                 markInstance.transform.localPosition = startPosition;
 
@@ -136,43 +136,43 @@ public class StepPlayer : MonoBehaviour
                 runningStep.markInstance = markInstance;
                 currentSteps.Add(runningStep);
 
-                LeanTween.moveLocal(markInstance, endPosition, step.perfectTime).setOnComplete(
-                    () => {
-                        if (interactTurntable)
-                        {
-                            LeanTween.moveLocal(runningStep.markInstance, new Vector3(0, -step.value, 0), step.value).setOnComplete(
-                                () =>
-                                {
-                                    StepPerfect(runningStep);
-                                }
-                            );
-                        }
-                        else
-                        {
-                            LeanTween.scale(runningStep.markInstance, Vector3.zero, PERFECT_TIME_DELTA).setOnComplete(
-                                () =>
-                                {
-                                    if (interactButton != null)
-                                    {
-                                        StepMiss(runningStep);
-                                    }
-                                    else if (interactSlider != null)
-                                    {
-                                        float deltaValue = step.value - interactSlider.value;
-                                        if (Mathf.Abs(deltaValue) < PERFECT_VALUE_DELTA)
-                                        {
-                                            StepPerfect(runningStep);
-                                        }
-                                        else
-                                        {
-                                            StepMiss(runningStep);
-                                        }
-                                    }
-                                }
-                            );
-                        }
-                    }
-                );
+                //LeanTween.moveLocal(markInstance, endPosition, step.perfectTime).setOnComplete(
+                //    () => {
+                //        if (interactTurntable)
+                //        {
+                //            LeanTween.moveLocal(runningStep.markInstance, new Vector3(0, -step.value, 0), step.value).setOnComplete(
+                //                () =>
+                //                {
+                //                    StepPerfect(runningStep);
+                //                }
+                //            );
+                //        }
+                //        else
+                //        {
+                //            LeanTween.scale(runningStep.markInstance, Vector3.zero, PERFECT_TIME_DELTA).setOnComplete(
+                //                () =>
+                //                {
+                //                    if (interactButton != null)
+                //                    {
+                //                        StepMiss(runningStep);
+                //                    }
+                //                    else if (interactSlider != null)
+                //                    {
+                //                        float deltaValue = step.value - interactSlider.value;
+                //                        if (Mathf.Abs(deltaValue) < PERFECT_VALUE_DELTA)
+                //                        {
+                //                            StepPerfect(runningStep);
+                //                        }
+                //                        else
+                //                        {
+                //                            StepMiss(runningStep);
+                //                        }
+                //                    }
+                //                }
+                //            );
+                //        }
+                //    }
+                //);
 
                 ++stepIndex;
                 if (stepIndex == playingList.steps.Length)
@@ -274,38 +274,38 @@ public class StepPlayer : MonoBehaviour
         }
     }
 
-    public void ButtonPressed(InteractButton interact)
-    {
-        RunningStep runningStep = GetFirstRunningStep(interact.gameObject);
-        if (runningStep.parent != null)
-        {
-            LeanTween.cancel(runningStep.markInstance);
+    //public void ButtonPressed(InteractButton interact)
+    //{
+    //    RunningStep runningStep = GetFirstRunningStep(interact.gameObject);
+    //    if (runningStep.parent != null)
+    //    {
+    //        LeanTween.cancel(runningStep.markInstance);
 
-            Step step = runningStep.step;
-            float deltaTime = playTime - (runningStep.startTimestamp + step.perfectTime);
-            if (Mathf.Abs(deltaTime) < PERFECT_TIME_DELTA)
-            {
-                StepPerfect(runningStep);
-            }
-            else
-            {
-                StepMiss(runningStep);
-            }
-        }
-    }
+    //        Step step = runningStep.step;
+    //        float deltaTime = playTime - (runningStep.startTimestamp + step.perfectTime);
+    //        if (Mathf.Abs(deltaTime) < PERFECT_TIME_DELTA)
+    //        {
+    //            StepPerfect(runningStep);
+    //        }
+    //        else
+    //        {
+    //            StepMiss(runningStep);
+    //        }
+    //    }
+    //}
 
-    public void TurntableMiss(InteractTurntable interact)
-    {
-        RunningStep runningStep = GetFirstRunningStep(interact.gameObject);
-        if (runningStep.parent != null)
-        {
-            if(playTime > runningStep.startTimestamp + runningStep.step.perfectTime * 1.2f) {
-                LeanTween.cancel(runningStep.markInstance);
+    //public void TurntableMiss(InteractTurntable interact)
+    //{
+    //    RunningStep runningStep = GetFirstRunningStep(interact.gameObject);
+    //    if (runningStep.parent != null)
+    //    {
+    //        if(playTime > runningStep.startTimestamp + runningStep.step.perfectTime * 1.2f) {
+    //            LeanTween.cancel(runningStep.markInstance);
 
-                Step step = runningStep.step;
-                StepMiss(runningStep);
-            }
-        }
-    }
+    //            Step step = runningStep.step;
+    //            StepMiss(runningStep);
+    //        }
+    //    }
+    //}
 
 }

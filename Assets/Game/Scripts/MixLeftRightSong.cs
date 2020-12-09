@@ -7,12 +7,12 @@ public class MixLeftRightSong : MonoBehaviour
 
     public AudioSource leftSong;
     public AudioSource rightSong;
-    public InteractSlider mixSlider;
+    //public InteractSlider mixSlider;
 
     void Update()
     {
-        leftSong.volume = mixSlider.value;
-        rightSong.volume = 1 - mixSlider.value;
+        //leftSong.volume = mixSlider.value;
+        //rightSong.volume = 1 - mixSlider.value;
     }
     
 }

@@ -55,6 +55,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,6 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &3101494486091953976
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +123,6 @@ GameObject:
   m_Component:
   - component: {fileID: 303115851086942377}
   - component: {fileID: 8983515740725108948}
-  - component: {fileID: 3132905553544398357}
   m_Layer: 0
   m_Name: Turntable
   m_TagString: Untagged
@@ -157,28 +158,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 0.5, z: 1.5}
   m_Center: {x: 0, y: 0.25, z: 0}
---- !u!114 &3132905553544398357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4681828056510245165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcc435668f8a8ea46bd36a4efbb4590c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabParent: {fileID: 0}
-  rigidbody: {fileID: 0}
-  grabeable: 0
-  grabPriority: 0
-  interactionScripts: []
-  interactOnGrab: 0
-  interactOnRelease: 0
-  interactOnClickDown: 0
-  interactOnClickUp: 0
-  interactionPriority: 0
 --- !u!1 &5178353036725441914
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +213,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -258,3 +238,4 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}

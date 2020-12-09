@@ -6,6 +6,7 @@ public class FresnelLamp : MonoBehaviour
 {
 
     private float initialYRotation;
+    public float rotationSpeedOffset = 0;
     public float rotationOffset = 0;
     public float rotationSpeed = 1;
     public float rotationDelta = 10;
@@ -23,7 +24,7 @@ public class FresnelLamp : MonoBehaviour
     void Update()
     {
         Vector3 rotation = transform.localRotation.eulerAngles;
-        rotation.y = initialYRotation + Mathf.Sin(Time.time * rotationSpeed + rotationOffset) * rotationDelta;
+        rotation.y = initialYRotation + Mathf.Sin(Time.time * rotationSpeed + rotationOffset) * rotationDelta + rotationOffset;
         transform.localEulerAngles = rotation;
     }
     
